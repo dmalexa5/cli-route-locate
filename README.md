@@ -28,7 +28,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Before this project, each individual routing could over upwards of 12 minutes for a new engineer, and around 5 to 6 minutes for a more experienced engineer who has accumulated the necessary tribal knowledge.
+Before this project, each individual routing would take over 12 minutes for a new engineer, and around 5 to 6 minutes for a more experienced engineer who has accumulated the necessary tribal knowledge.
 
 **Now, it takes 30 seconds for an experienced engineer and under 2.5 minutes for someone new.**
 
