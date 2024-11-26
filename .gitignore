@@ -1,0 +1,4 @@
+test.py
+*.spec
+__pycache__
+build/
