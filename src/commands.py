@@ -11,16 +11,39 @@ with open('../config/command_config.yml', 'r') as f:
 with open('../config/messages.yml', 'r') as f:
     messages = yaml.load(f, Loader=yaml.Loader)
 
-def help(options:list, args:list):
-    scripts.clear_screen()
-    rich.print(messages['help']['header'])
+def help(options:list, args:list=None):
+    '''Prints information about the program or a specific command.
+    
+    Args:
+        options (list): List of command options. Not currently used.
+        args (list): List of commands to print information about.
+    '''
 
-    try:
-        input('\nPress enter to exit...')
-    except KeyboardInterrupt:
-        pass
+    def command_help(command:str):
+        '''Prints help for a specific command'''
 
-    scripts.reset_screen()
+        rich.print(f'\t[bold]{command}[/bold]\n\t[cyan]\u2022[/cyan] {command_data[command]["description"]}')
+        
+        aliases = command_data[command]["aliases"]
+        
+        if len(aliases) > 0: 
+            rich.print(f'\tAliases: [yellow]{command_data[command]["aliases"]}[/yellow]\n')
+        else:
+            rich.print('\t[light grey]No aliases.[/light grey]\n')
+        
+        for line in command_data[command]['help'].split('\n'): 
+            rich.print(f'\t\t{line}')
+
+    if len(args) > 0:
+        for command in args:
+            if command in command_data.keys():
+                command_help(command)
+            else:
+                rich.print(f'[red]Command [/red][yellow]{command}[/yellow][red] not found[/red]')
+    else:
+        for command in command_data.keys():
+            command_help(command)
+
     return
 
 def part(options:list, args:list):
