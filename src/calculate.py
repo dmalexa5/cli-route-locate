@@ -189,10 +189,26 @@ def weld(size:float, weight:float, num_parts:int, inches:float, fixturing:bool) 
             breaks_factor is the factor for breaks in the weld cell
     
     '''
+    # Basic error handling
+    if type(size) == str:
+        size = float(size)
+
+    if type(weight) == str:
+        weight = float(weight)
+
+    if type(num_parts) == str:
+        num_parts = int(num_parts)
+
+    if type(inches) == str:
+        inches = float(inches)
+
+    if type(fixturing) == str and fixturing.lower() in ['y', 'n']:
+        fixturing = fixturing.lower() == 'y'
 
     # Get weld speed
     for setting in config['weld']['size']:
-        if setting[0] == size:
+
+        if setting[0] == round(size, 2):
             speed = setting[1]
 
     # Hoist/Safety Factor 

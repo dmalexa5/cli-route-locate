@@ -12,15 +12,15 @@ part:
         i.e. [yellow]>> part l e B P[/yellow]
                 Starts the wizard for a large bent painted piece part
 
-        [cyan]-M, --macro[/cyan]    Runs the new part macro
-        [cyan]-L, --locator[/cyan]  Runs only the locator macro
+        [cyan]-m, --macro[/cyan]    Runs the new part macro
+        [cyan]-l, --locator[/cyan]  Runs only the locator macro
     
-        i.e. [yellow]>> part [/yellow][cyan]-M[/cyan][yellow] l e B P[/yellow]
+        i.e. [yellow]>> part [/yellow][cyan]-m[/cyan][yellow] l e B P[/yellow]
     aliases: ['p']
     options:
         [
-            '--macro', '-M', # Runs the new part macro
-            '--locator', '-L' # Runs only the locator macro
+            '--macro', '-m', # Runs the new part macro
+            '--locator', '-l' # Runs only the locator macro
         ]
     args:
         - l # laser
@@ -115,15 +115,15 @@ weld:
         i.e. [yellow]>> weld mp P[/yellow]
                 Starts the wizard for a painted weldment
 
-        [cyan]-M, --macro[/cyan]    Runs the new part macro
-        [cyan]-L, --locator[/cyan]  Runs only the locator macro
+        [cyan]-m, --macro[/cyan]    Runs the new part macro
+        [cyan]-l, --locator[/cyan]  Runs only the locator macro
     
-        i.e. [yellow]>> weld [/yellow][cyan]-M[/cyan][yellow] mp P[/yellow]
+        i.e. [yellow]>> weld [/yellow][cyan]-m[/cyan][yellow] mp P[/yellow]
     aliases: ['w', 'weldment']
     options:
         [
-            '--macro', '-M', # Runs the new part macro
-            '--locator', '-L' # Runs only the locator macro
+            '--macro', '-m', # Runs the new part macro
+            '--locator', '-l' # Runs only the locator macro
         ]
     args:
         - mb # medium bent
@@ -132,10 +132,84 @@ weld:
         - P # paint weldment
     func: weldment # commands.weldment
     data:
-        mb: ['MED BENT', 'WELDER', 'WELD PART']
-        mp: ['400001', 'WELDER', 'WELD PART']
-        sub: ['465001', 'WELDER', 'WELD PART']
-        P: ['095424', 'PAINTER', 'POWDER PAINT PART']
+        mb: 
+            record: ['MED BENT', 'WELDER', 'WELD PART']
+            params:
+                size: 
+                    - 'Enter weld size: '
+                    - '^\d*\.\d*$'
+                weight: 
+                    - 'Enter weight of part being welded: '
+                    - '^\d*\.\d*$|^\d*$'
+                num_parts: 
+                    - 'Enter number of parts to weld: '
+                    - '^[1-9]$|^1[0-2]$'
+                inches: 
+                    - 'Enter total length to weld: '
+                    - '^\d*\.\d*$|^\d*$'
+                fixturing: 
+                    - 'Part has fixturing? (y/n): '
+                    - '^Y$|^N$|^y$|^n$'
+            calc_func: weld
+        mp: 
+            record: ['400001', 'WELDER', 'WELD PART']
+            params:
+                size: 
+                    - 'Enter weld size: '
+                    - '^\d*\.\d*$'
+                weight: 
+                    - 'Enter weight of part being welded: '
+                    - '^\d*\.\d*$|^\d*$'
+                num_parts: 
+                    - 'Enter number of parts to weld: '
+                    - '^[1-9]$|^1[0-2]$'
+                inches: 
+                    - 'Enter total length to weld: '
+                    - '^\d*\.\d*$|^\d*$'
+                fixturing: 
+                    - 'Part has fixturing? (y/n): '
+                    - '^Y$|^N$|^y$|^n$'
+            calc_func: weld
+        sub: 
+            record: ['465001', 'WELDER', 'WELD PART']
+            params:
+                size: 
+                    - 'Enter weld size: '
+                    - '^\d*\.\d*$'
+                weight: 
+                    - 'Enter weight of part being welded: '
+                    - '^\d*\.\d*$|^\d*$'
+                num_parts: 
+                    - 'Enter number of parts to weld: '
+                    - '^[1-9]$|^1[0-2]$'
+                inches: 
+                    - 'Enter total length to weld: '
+                    - '^\d*\.\d*$|^\d*$'
+                fixturing: 
+                    - 'Part has fixturing? (y/n): '
+                    - '^Y$|^N$|^y$|^n$'
+            calc_func: weld
+        P: 
+            record: ['095424', 'PAINTER', 'POWDER PAINT WELDMENT']
+            params:
+               record: ['095424', 'PAINTER', 'POWDER PAINT PART']
+            params:
+                length: 
+                    - 'Enter paint hang length: '
+                    - '^\d*\.\d*$|^\d*$'
+            calc_func: paint
+
+update:
+    description: Run the update macro for a routing.
+    help: |
+        i.e. [yellow]>> update[/yellow]
+
+    aliases: []
+    options: [
+        '--calc', '-c' # Runs the calculator instead of only taking usages
+        ] 
+    args: []
+    func: update # commands.update
 
 exit:
     description: Exit the program

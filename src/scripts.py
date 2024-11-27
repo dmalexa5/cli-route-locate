@@ -71,7 +71,7 @@ def get_usage(message:str, pattern:str) -> str:
 def part_check_args(args:list) -> bool:
     '''Check args for the part command. Returns True if valid, False if not'''
 
-    # Check args
+    ## Check args
 
     # Check for no args
     if len(args) == 0:
@@ -88,40 +88,36 @@ def part_check_args(args:list) -> bool:
     if len(args) != len(set(args)):
         rich.print('[bold red]Duplicate cells provided.[/bold red]\n')
         return False
+    
+    # Check for double bend routing
+    if 'b' in args and 'B' in args:
+        rich.print('[bold red]Double bend routing not allowed.[/bold red]\n')
+        return False
 
     return True
 
-def part_check_options(options:list) -> bool:
-    '''Check options for the part command. Returns True if valid, False if not'''
+def restrict_options(options:list, max_num:int=1):
 
-    if len(options) > 1:
+    if len(options) > max_num:
         rich.print('[bold red]Too many options provided. [/bold red]\n')
         return False
-    
-    if len(options) == 1:
+    elif len(options) == 1:
         option = options[0]
+    elif len(options) > 1:
+        option = options
+    else:
+        option = ''
+    
+    return option
 
-        if option not in command_data['part']['options']:
-            rich.print(f'[bold red]Invalid option provided: "[white]{option}[/white]". Available options: {command_data["part"]["options"]}[/bold red]\n')
-            return False
-
-    return True
-
-def construct_record_sequence(args:list) -> list:
-
-    # Check args
-    if args == []:
-        return
-    elif not part_check_args(args):
-        rich.print(f'[bold red]Invalid args provided: [white]{args}[/white].[/bold red]\n')
-        return
+def construct_record_sequence(args:list, item:str='part') -> list:
 
     records = []
 
     for index, cell in enumerate(args):
         
         # Get all neccessary data from the user
-        cell_data = command_data['part']['data'][cell]
+        cell_data = command_data[item]['data'][cell]
         kwargs = {}
 
         for param, data in cell_data['params'].items():

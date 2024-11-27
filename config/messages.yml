@@ -13,7 +13,12 @@ intro: |
 
 part:
   macro_option: '[bold cyan]--macro[/bold cyan] option selected.'
-  update_option: '[bold cyan]--update[/bold cyan] option selected.'
+  locator_option: '[bold cyan]--locator[/bold cyan] option selected.'
+  error:
+    not_implemented: '[bold red]Not implemented yet.[/bold red]'
+
+weld:
+  macro_option: '[bold cyan]--macro[/bold cyan] option selected.'
   locator_option: '[bold cyan]--locator[/bold cyan] option selected.'
   error:
     not_implemented: '[bold red]Not implemented yet.[/bold red]'
@@ -58,7 +63,7 @@ tutorial:
       [yellow]>> part l e b P[/yellow]
     
   step_3: |
-    Note that to run the macro, you need to inlude the --macro or -M option. We won't do that in this tutorial.
+    Note that to run the macro, you need to inlude the --macro or -m option. We won't do that in this tutorial.
 
     [bold green]Step 3: Follow the wizard.[/bold green]
   

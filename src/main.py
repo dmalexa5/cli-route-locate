@@ -105,5 +105,5 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             commands.exit()
         except Exception as e:
-            print(e)
+            print(e.with_traceback())
             rich.print('[bold red]UNABLE TO RUN PREVIOUS COMMAND.[/bold red]\n\n')

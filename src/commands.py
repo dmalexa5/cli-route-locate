@@ -49,18 +49,22 @@ def help(options:list, args:list=None):
 def part(options:list, args:list):
 
     # Check options
-    if not scripts.part_check_options(options): return 
-    elif len(options) == 1:
-        option = options[0]
-    else:
-        option = ''
+    option = scripts.restrict_options(options, max_num=1)
+    if option == False: return
+
+    # Check args
+    if args == []:
+        return
+    elif not scripts.part_check_args(args):
+        rich.print(f'[bold red]Invalid args provided: [white]{args}[/white].[/bold red]\n')
+        return
     
-    # Run command under the given option conditions
+    # Run command with the given option
     kb = pynput.keyboard.Controller()
 
     match option:
 
-        case '--macro' | '-M': # Runs the oracle new routing macro
+        case '--macro' | '-m': # Runs the oracle new routing macro
             rich.print(messages['part']['macro_option'])
             
             # Construct record sequence
@@ -75,13 +79,8 @@ def part(options:list, args:list):
 
             route.route_macro(kb, pn, records)
             route.locate_macro(kb, pn, locator)
-
-        case '--update' | '-U': # Runs the oracle update routing macro
-            rich.print(messages['part']['update_option'])
-
-            rich.print(messages['part']['errpror']['not_implemented'])
         
-        case '--locator' | '-L': # Runc the oracle locator macro ONLY
+        case '--locator' | '-l': # Runc the oracle locator macro ONLY
             rich.print(messages['part']['locator_option'])
 
             pn = scripts.get_part_number()
@@ -97,7 +96,42 @@ def part(options:list, args:list):
             records = scripts.construct_record_sequence(args)
 
 def weldment(options:list, args:list):
-    print(f'weldment function run with option: {options} and args: {args}')
+    '''Runs the weldment wizard'''
+    print(f'Runs the weldment macro with options: {options} and args: {args}')
+
+    # Check options
+    option = scripts.restrict_options(options, max_num=1)
+    if option == False: return
+    
+    # Run command with the given option
+    kb = pynput.keyboard.Controller()
+
+    match option:
+
+        case '--macro' | '-m': # Runs the oracle new routing macro
+            rich.print(messages['weld']['macro_option'])
+            
+            # Construct record sequence
+            records = scripts.construct_record_sequence(args, item='weld')
+            
+            # Execute macro
+            pn = scripts.get_part_number()
+            locator = scripts.get_locator()
+
+            if records == None or pn == None or locator == None:
+                return
+
+            route.route_macro(kb, pn, records)
+            route.locate_macro(kb, pn, locator)
+
+        case _:
+            
+            # Construct record sequence
+            records = scripts.construct_record_sequence(args, item='weld')
+    pass
+
+def update(options:list, args:list):
+    print(f'update function run with option: {options} and args: {args}')
     pass
 
 def tutorial(options:list, args:list):
