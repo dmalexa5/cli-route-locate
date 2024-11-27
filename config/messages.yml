@@ -10,14 +10,6 @@ intro: |
  
  [/bold white][cyan]______________________________________________________________________________[/cyan]
 
- Available commands:
-  - [yellow]part[/yellow]    Create a new part routing.
-  - [yellow]help[/yellow]    Display the help message.
-  - [yellow]exit[/yellow]    Exit program.
-  - [yellow]tutorial[/yellow]   Walk through the tutorial.
- Coming soon:
-  - [yellow]weld[/yellow]    Create a new weldment routing.
-
 
 part:
   macro_option: '[bold cyan]--macro[/bold cyan] option selected.'

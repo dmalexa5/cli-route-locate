@@ -11,6 +11,10 @@ from watcher import Watcher
 with open('../config/messages.yml', 'r') as f:
     messages = yaml.load(f, Loader=yaml.Loader)
 
+# Read available commands from config file
+with open('../config/command_config.yml', 'r') as f:
+    command_data = yaml.load(f, Loader=yaml.Loader)
+
 def get_part_number() -> str:
 
     while True:
@@ -64,7 +68,7 @@ def get_usage(message:str, pattern:str) -> str:
         else:
             rich.print('[bold red]Invalid input.[/bold red]\n')
 
-def part_check_args(args:list, command_data:dict) -> bool:
+def part_check_args(args:list) -> bool:
     '''Check args for the part command. Returns True if valid, False if not'''
 
     # Check args
@@ -87,7 +91,7 @@ def part_check_args(args:list, command_data:dict) -> bool:
 
     return True
 
-def part_check_options(options:list, command_data:dict) -> bool:
+def part_check_options(options:list) -> bool:
     '''Check options for the part command. Returns True if valid, False if not'''
 
     if len(options) > 1:
@@ -103,12 +107,12 @@ def part_check_options(options:list, command_data:dict) -> bool:
 
     return True
 
-def construct_record_sequence(args:list, command_data:dict) -> list:
+def construct_record_sequence(args:list) -> list:
 
     # Check args
     if args == []:
         return
-    elif not part_check_args(args, command_data):
+    elif not part_check_args(args):
         rich.print(f'[bold red]Invalid args provided: [white]{args}[/white].[/bold red]\n')
         return
 
@@ -179,9 +183,9 @@ def clear_screen():
 
 def reset_screen():
     clear_screen()
-    rich.print(messages['intro'])
+    print_intro()
 
-def run_tutorial(command_data:dict):
+def run_tutorial():
     clear_screen()
     rich.print(messages['tutorial']['welcome'])
 
@@ -206,7 +210,7 @@ def run_tutorial(command_data:dict):
 
     clear_screen()
     rich.print(messages['tutorial']['step_3'])
-    records = construct_record_sequence(['l', 'e', 'b', 'P'], command_data)
+    records = construct_record_sequence(['l', 'e', 'b', 'P'])
 
     clear_screen()
     rich.print('Congrats! You generated a set of records that make up a routing.\n')
@@ -244,3 +248,9 @@ def run_tutorial(command_data:dict):
 
     input('Press enter to exit the tutorial...')
     reset_screen()
+
+def print_intro():
+    rich.print(messages['intro'])
+
+    for command in command_data.keys():
+        rich.print(f' [bold cyan]\u2022[/bold cyan] [yellow]{command}[/yellow] - {command_data[command]["description"]}')

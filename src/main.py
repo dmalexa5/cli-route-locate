@@ -1,7 +1,8 @@
-import warnings, rich
+import warnings
 warnings.filterwarnings("ignore", category=SyntaxWarning)
 
-import commands, typing, yaml, os
+import commands, typing, yaml, os, rich
+import scripts
 
 # Read available commands from config file
 with open('../config/command_config.yml', 'r') as f:
@@ -95,7 +96,7 @@ def parse_args(input:str) -> typing.Tuple[str, list[str], list[str]]:
 if __name__ == '__main__':
 
     os.system('cls' if os.name == 'nt' else 'clear') # Clear screen
-    rich.print(messages['intro']) # Intro message
+    scripts.print_intro()
     
     # Main loop
     while True:

@@ -26,7 +26,7 @@ part:
                     - '^\d*\.\d*$|^\d*$'
                 grade: 
                     - 'Enter material grade: '
-                    - '^EMS \d*-\d*$'
+                    - '^EMS \d*-\d*$|^ems \d*-\d*$'
                 perimeter: 
                     - 'Enter part perimeter: '
                     - '^\d*\.\d*$|^\d*$'
@@ -75,7 +75,7 @@ part:
             record: ['095424', 'PAINTER', 'POWDER PAINT PART']
             params:
                 length: 
-                    - 'Enter minimum paintable length: '
+                    - 'Enter paint hang length: '
                     - '^\d*\.\d*$|^\d*$'
             calc_func: paint
         s: 
@@ -84,6 +84,9 @@ part:
                 dist: 
                     - 'Enter distance to cut: '
                     - '^\d*\.\d*$|^\d*$'
+                steel:
+                    - 'Is this a steel part? (y/n): '
+                    - '^Y$|^N$|^y$|^n$'
             calc_func: saw
 
 weldment:

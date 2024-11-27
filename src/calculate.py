@@ -1,4 +1,4 @@
-import tomllib
+import tomllib, math
 
 # Load config file
 with open('../config/config.toml', 'rb') as f:
@@ -8,11 +8,18 @@ def laser(thickness:float, grade:str, perimeter:float) -> float:
     '''Calculates the usage for the laser cell. 
     Handles both fiber and plasma laser usage.'''
     
+    # Basic error handling that isn't handled in the config
     if type(thickness) == str:
         thickness = float(thickness)
     
     if type(perimeter) == str:
         perimeter = float(perimeter)
+
+    if type(grade) == str:
+        grade = grade.upper()
+
+    if thickness == 0.134: # Edge case where 0.1345 rounds down on Altec prints
+        thickness = 0.135
 
     thickness = round(thickness, 3)
     
@@ -43,18 +50,20 @@ def laser(thickness:float, grade:str, perimeter:float) -> float:
         elif thickness < 1:
             usage = usage + 0.2
 
-    # Return multiplier adjusted usage
+    # Return multiplier adjusted usage rounded to 2 decimal places
     return round(usage * 1.35, 2)
 
 def edgegrind(short:float, long:float) -> float:
     '''Calculates the usage for the edgegrind cell.'''
 
+    # Basic error handling
     if type(short) == str:
         short = float(short)
 
     if type(long) == str:
         long = float(long)
-    
+
+    # Calculate usage
     if long < 6:
         usage = 0.5
     elif (long * short) / 144 < 0.1:
@@ -88,20 +97,40 @@ def drill(size:str, num:int) -> float:
 def saw(steel:bool, dist:float) -> float:
     '''Calculates the usage for the saw cell.'''
 
+    # Basic error handling
     if type(dist) == str:    
         dist = float(dist)
     
+    if not type(steel) == bool:
+        
+        if type(steel) == str and steel.lower() in ['y', 'n']:
+            steel = steel.lower() == 'y'
+        
+        else:
+            raise UsageError(f'Unable to calculate usage for steel value {steel} of type {type(steel)}')
+
+
+    
     # Check if length is valid and calculate usage
+    dist = int(math.ceil(dist))
+
     if steel and dist in range(1, 21):
         usage = dist + 1
         
-    elif (not steel) and dist in config['saw'].keys():
-        usage = config['saw'][dist]
+    elif (not steel):
+        dist = str(dist)
+
+        if dist in config['saw'].keys():
+            usage = config['saw'][dist]
+        
+        else:
+            raise UsageError(f'Unable to calculate usage for non-steel length {dist}')
         
     else:
-        raise UsageError(f'Unable to calculate usage for {'steel' if steel else 'non-steel'} length {dist}')
+        raise UsageError(f'Unable to calculate usage for steel length {dist}')
 
-    return usage
+    # Return usage rounded to 2 decimal places
+    return round(usage, 2)
 
 def bend(bends:int, weight:float) -> float:
     '''Calculates the usage for the bend cell.
@@ -114,6 +143,7 @@ def bend(bends:int, weight:float) -> float:
         float: Usage for bend cell
     '''
 
+    # Basic error handling
     if type(weight) == str:
         weight = float(bends)
 
@@ -211,15 +241,17 @@ def weld(size:float, weight:float, num_parts:int, inches:float, fixturing:bool) 
 def paint(length:float) -> float:
     '''Calculates the usage for the paint cell.'''
 
+    # Basic error handling
     if type(length) == str:
         length = float(length)
 
+    # Calculate usage
     if length < 24:
         usage = length / 2
     else:
         usage = ((24 / length) + 2) * 12
     
-    return usage
+    return round(usage, 2) # Round to 2 decimal places
 
 class UsageError(Exception):
     """Exception raised for invalid usage"""

@@ -26,7 +26,7 @@ def help(options:list, args:list):
 def part(options:list, args:list):
 
     # Check options
-    if not scripts.part_check_options(options, command_data): return 
+    if not scripts.part_check_options(options): return 
     elif len(options) == 1:
         option = options[0]
     else:
@@ -41,7 +41,7 @@ def part(options:list, args:list):
             rich.print(messages['part']['macro_option'])
             
             # Construct record sequence
-            records = scripts.construct_record_sequence(args, command_data)
+            records = scripts.construct_record_sequence(args)
             
             # Execute macro
             pn = scripts.get_part_number()
@@ -71,7 +71,7 @@ def part(options:list, args:list):
         case _:
             
             # Construct record sequence
-            records = scripts.construct_record_sequence(args, command_data)
+            records = scripts.construct_record_sequence(args)
 
 def weldment(options:list, args:list):
     print(f'weldment function run with option: {options} and args: {args}')
@@ -80,7 +80,7 @@ def weldment(options:list, args:list):
 def tutorial(options:list, args:list):
     '''Runs a detailed, step-by-step, guided tutorial for this program'''
     try:
-        scripts.run_tutorial(command_data=command_data)
+        scripts.run_tutorial()
     except KeyboardInterrupt:
         scripts.reset_screen()
     except Exception as e:
