@@ -57,7 +57,7 @@ _For co-ops/interns: It is recommended that you download and run `dist/main.exe`
    ```
    or
    ```sh
-   pyinstaller -F src/main.py --name cli-route-locate
+   pyinstaller -F src/main.py -n cli-route-locate -i images/icon.ico
    ```
 
 
