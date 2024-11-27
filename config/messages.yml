@@ -26,30 +26,6 @@ route:
   locator_box: '[bold cyan]Ctrl[/bold cyan] + [bold cyan]Shift[/bold cyan] + [bold cyan]Right Arrow[/bold cyan] in the POU locator box...'
   locator_complete: '[bold green]Locator complete.[/bold green]'
 
-help:
-  header: >
-    Commands:
-      part    Create a new part routing.
-        [yellow]l[/yellow]            Lasers
-        [yellow]e[/yellow]            Edgegrind
-        [yellow]b[/yellow]            Small Brake
-        [yellow]B[/yellow]            Large Brake
-        [yellow]P[/yellow]            Paint part
-        [yellow]s[/yellow]            Saw cut
-        [yellow]d[/yellow]            Drill and Tap
-
-        i.e. [yellow]>> part l e B P[/yellow]
-                Starts the wizard for a large bent painted piece part
-
-        [cyan]-M, --macro[/cyan]    Runs the new part macro
-        [cyan]-U, --update[/cyan]   Runs the update existing part macro
-        [cyan]-L, --locator[/cyan]  Runs only the locator macro
-      
-        i.e. [yellow]>> part [/yellow][cyan]-M[/cyan][yellow] l e B P[/yellow]
-
-      help        Display this help message
-
-      exit        Exit program
 
 tutorial:
   welcome: |

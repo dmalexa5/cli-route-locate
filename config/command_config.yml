@@ -1,10 +1,25 @@
 part:
-    description: Create or edit a part routing.
+    description: Create a new part routing.
+    help: |
+        [yellow]l[/yellow]            Lasers
+        [yellow]e[/yellow]            Edgegrind
+        [yellow]b[/yellow]            Small Brake
+        [yellow]B[/yellow]            Large Brake
+        [yellow]P[/yellow]            Paint part
+        [yellow]s[/yellow]            Saw cut
+        [yellow]d[/yellow]            Drill and Tap
+
+        i.e. [yellow]>> part l e B P[/yellow]
+                Starts the wizard for a large bent painted piece part
+
+        [cyan]-M, --macro[/cyan]    Runs the new part macro
+        [cyan]-L, --locator[/cyan]  Runs only the locator macro
+    
+        i.e. [yellow]>> part [/yellow][cyan]-M[/cyan][yellow] l e B P[/yellow]
     aliases: ['p']
     options:
         [
             '--macro', '-M', # Runs the new part macro
-            '--update', '-U', # Runs the update existing part macro
             '--locator', '-L' # Runs only the locator macro
         ]
     args:
@@ -89,13 +104,25 @@ part:
                     - '^Y$|^N$|^y$|^n$'
             calc_func: saw
 
-weldment:
-    description: Create or edit a weldment routing.
-    aliases: ['w', 'weld']
+weld:
+    description: Create a new weldment routing.
+    help: |
+        [yellow]mp[/yellow]           Medium Parts
+        [yellow]mb[/yellow]           Medium Bent
+        [yellow]sub[/yellow]          Subbases
+        [yellow]P[/yellow]            Paint line
+
+        i.e. [yellow]>> weld mp P[/yellow]
+                Starts the wizard for a painted weldment
+
+        [cyan]-M, --macro[/cyan]    Runs the new part macro
+        [cyan]-L, --locator[/cyan]  Runs only the locator macro
+    
+        i.e. [yellow]>> weld [/yellow][cyan]-M[/cyan][yellow] mp P[/yellow]
+    aliases: ['w', 'weldment']
     options:
         [
             '--macro', '-M', # Runs the new part macro
-            '--update', '-U', # Runs the update existing part macro
             '--locator', '-L' # Runs only the locator macro
         ]
     args:
@@ -112,6 +139,11 @@ weldment:
 
 exit:
     description: Exit the program
+    help: |
+        Gracefully exits the program
+
+        i.e. [yellow]>> exit[/yellow]
+
     aliases: ['quit', 'q', 'stop']
     options: []
     args: []
@@ -119,6 +151,11 @@ exit:
 
 tutorial:
     description: Walk through the tutorial
+    help: |
+        i.e. [yellow]>> tutorial[/yellow]
+
+        If you have questions during the tutorial, talk to a 24A mfg engineer!
+
     aliases: []
     options: []
     args: []
@@ -126,6 +163,10 @@ tutorial:
 
 clear:
     description: Clear the screen
+    help: |
+        Clears the screen. Equivalent to [yellow]cls[/yellow] on Windows and [yellow]clear[/yellow] on Linux.
+
+        i.e. [yellow]>> clear[/yellow]
     aliases: []
     options: []
     args: []
