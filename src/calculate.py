@@ -252,7 +252,12 @@ def weld(size:float, weight:float, num_parts:int, inches:float, fixturing:bool) 
     # Calculate usage
     usage = ((((hoist_factor + prep_factor + weld_time) * 2) + fitup_factor)/2) * config['weld']['breaks_factor']
 
-    return round(usage, 3)
+    return round(usage, 2)
+
+def weldpart(size:float, weight:float, inches:float) -> float:
+    '''Calculates the usage for when a single part is routed to a weld cell.'''
+
+    return weld(size, weight, 1, inches, False)
 
 def paint(length:float) -> float:
     '''Calculates the usage for the paint cell.'''

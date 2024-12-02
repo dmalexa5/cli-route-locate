@@ -103,6 +103,19 @@ part:
                     - 'Is this a steel part? (y/n): '
                     - '^Y$|^N$|^y$|^n$'
             calc_func: saw
+        w: 
+            record: ['400001', 'WELDER', 'WELD PART']
+            params:
+                size: 
+                    - 'Enter weld size: '
+                    - '^\d*\.\d*$'
+                weight: 
+                    - 'Enter weight of part being welded: '
+                    - '^\d*\.\d*$|^\d*$'
+                inches: 
+                    - 'Enter total length to weld: '
+                    - '^\d*\.\d*$|^\d*$'
+            calc_func: weldpart
 
 weld:
     description: Create a new weldment routing.
