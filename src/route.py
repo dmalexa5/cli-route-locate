@@ -35,32 +35,30 @@ def enter_record(kb:keyboard.Controller, record:list):
     kb.release(keyboard.Key.down)
     pass
 
-
-
-def enter_locator_pn(kb:keyboard.Controller, pn:str) -> None:
+def enter_locator(kb:keyboard.Controller, pn:str, locator:str) -> None:
     '''Macro.
-    Assumes that this is run when user ctrl + clicks into zoom find item box.'''
+    Assumes that this is run when user ctrl + shift + right arrows in the zoom find item box.'''
 
     sleep(1.25) #TODO: Wait for ctrl + shift + click to be released
 
+    # Enter part number
     kb.type(f"{pn}\r\r")
     ctrl_key(kb, keyboard.Key.tab)
     kb.press(keyboard.Key.down); kb.release(keyboard.Key.down)
 
-    return
+    with kb.pressed(keyboard.Key.shift):
+        kb.press(keyboard.Key.page_down)
+        kb.release(keyboard.Key.page_down)
 
-def enter_locator(kb:keyboard.Controller, locator:str) -> None:
-    '''Macro.
-    Assumes that this is run when user ctrl + shift + enters in the POU locator box.'''
+    ctrl_key(kb, keyboard.Key.down)
 
-    sleep(1.25) #TODO: Wait for ctrl + shift + enter to be released
-
+    # Enter locator
     kb.type(locator)
     ctrl_key(kb, 's')
     ctrl_key(kb, keyboard.Key.tab)
-    kb.type(f'\t{locator}')
-    ctrl_key(kb, 's') # Save
+    kb.type(f'\t{locator}') # Second locator entry
     alt_key(kb, 'i') # WIP Mass Update
+    ctrl_key(kb, 's') # Save
 
     return
 
@@ -95,7 +93,7 @@ def route_macro(kb:keyboard.Controller, pn:str, records:list):
     watcher = Watcher(route_part, {'kb':kb, 'pn':pn, 'records':records})
     watcher.start()
     
-    sleep(2.5) # Wait for oracle to catch up
+    sleep(3.5) # Wait for oracle to catch up
 
     rich.print(messages['route']['routing_complete'])
     return
@@ -104,17 +102,9 @@ def locate_macro(kb:keyboard.Controller, pn:str, locator:str):
 
     # Locator PN Macro / pre-locator prep macro
     rich.print(messages['route']['zoom_item_box'])
-    watcher = Watcher(enter_locator_pn, {'kb':kb, 'pn':pn})
+    watcher = Watcher(enter_locator, {'kb':kb, 'pn':pn, 'locator':locator})
     watcher.start()
 
-    sleep(0.5)
-    rich.print(messages['route']['zoom_item_complete'])
-
-    # Locator Macro
-    rich.print(messages['route']['locator_box'])
-    watcher = Watcher(enter_locator, {'kb':kb, 'locator':locator})
-    watcher.start()
-
-    sleep(0.5)
+    sleep(1.5)
     rich.print(messages['route']['locator_complete'])
     return
