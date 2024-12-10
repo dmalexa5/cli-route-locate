@@ -156,7 +156,7 @@ weld:
                     - '^\d*\.\d*$|^\d*$'
                 num_parts: 
                     - 'Enter number of parts to weld: '
-                    - '^[1-9]$|^1[0-2]$'
+                    - '^[1-9]$|^[1-3][0-9]$'
                 inches: 
                     - 'Enter total length to weld: '
                     - '^\d*\.\d*$|^\d*$'
@@ -175,7 +175,7 @@ weld:
                     - '^\d*\.\d*$|^\d*$'
                 num_parts: 
                     - 'Enter number of parts to weld: '
-                    - '^[1-9]$|^1[0-2]$'
+                    - '^[1-9]$|^[1-3][0-9]$'
                 inches: 
                     - 'Enter total length to weld: '
                     - '^\d*\.\d*$|^\d*$'
@@ -194,7 +194,7 @@ weld:
                     - '^\d*\.\d*$|^\d*$'
                 num_parts: 
                     - 'Enter number of parts to weld: '
-                    - '^[1-9]$|^1[0-2]$'
+                    - '^[1-9]$|^[1-3][0-9]$'
                 inches: 
                     - 'Enter total length to weld: '
                     - '^\d*\.\d*$|^\d*$'
