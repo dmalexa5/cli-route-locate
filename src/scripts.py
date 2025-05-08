@@ -1,6 +1,6 @@
 from pynput import keyboard, mouse
 from time import sleep
-import re, calculate, os, rich, yaml
+import re, calculate, os, rich, yaml, route
 
 import rich.table
 from pynput.keyboard import Listener as KeyboardListener
@@ -54,11 +54,7 @@ def get_locator() -> str:
 def get_usage(message:str, pattern:str) -> str:
     
     while True:
-        try:
-            val = input('\t' + message)
-        except KeyboardInterrupt:
-            print('\n')
-            return
+        val = input('\t' + message)
         
         if val == '':
             rich.print('[bold red]Empty values not allowed.[/bold red]\n')
@@ -96,62 +92,117 @@ def part_check_args(args:list) -> bool:
 
     return True
 
-def restrict_options(options:list, max_num:int=1):
 
-    if len(options) > max_num:
-        rich.print('[bold red]Too many options provided. [/bold red]\n')
-        return False
-    elif len(options) == 1:
-        option = options[0]
-    elif len(options) > 1:
-        option = options
-    else:
-        option = ''
-    
-    return option
+def construct_record_sequence(args:list, item:str, records:list=[]) -> list:
+    ''' Recursive function to populate a records table'''
 
-def construct_record_sequence(args:list, item:str='part') -> list:
+    index = 0 if records == None else len(records)
 
-    records = []
+    cell = args[index]
 
-    for index, cell in enumerate(args):
+    # Get all neccessary data from the user
+    cell_data = command_data[item]['data'][cell]
+    kwargs = {}
+
+    for param, data in cell_data['params'].items():
         
-        # Get all neccessary data from the user
-        cell_data = command_data[item]['data'][cell]
-        kwargs = {}
-
-        for param, data in cell_data['params'].items():
-            
-            message = data[0]
-            pattern = data[1]
-            
-            usage = get_usage(message, pattern)
-            
-            if usage is None:
-                return
-            
-            kwargs[param] = usage
-            
+        message = data[0]
+        pattern = data[1]
         
-        # Get usage
-        func = getattr(calculate, cell_data['calc_func'])
         try:
-            usage = func(**kwargs)
-        except calculate.UsageError as e:
-            rich.print(e)
-            rich.print("[bold red]Please try again...[/bold red]\n")
+            usage = get_usage(message, pattern)
+        except KeyboardInterrupt:
+            print('\n')
             return
+        
+        if usage is None:
+            return construct_record_sequence(args, item, records)
+        
+        kwargs[param] = usage
+    
+    
+    # Get usage
+    func = getattr(calculate, cell_data['calc_func'])
+    try:
+        usage = func(**kwargs)
+    except calculate.UsageError as e:
+        rich.print(e)
+        rich.print("[bold red]Please try again...[/bold red]\n")
+        return construct_record_sequence(args, item, records)
 
-        # Construct record
-        record = [str((index + 1) * 10)] + cell_data['record']
-        record.insert(3, usage)
+    # Construct record
+    record = [str((index + 1) * 10)] + cell_data['record']
+    record.insert(3, usage)
 
-        records.append(record)
+    records.append(record)
 
-    # Print table
+    # base case
+    if index == len(args) - 1:
+        return records
+    else:
+        return construct_record_sequence(args, item, records)
+
+def run_route_macro_option(args:list, item:str, pn:str):
+
+    rich.print(messages[item]['macro_option'])
+            
+    # Construct record sequence
+    records = construct_record_sequence(args, item)
+    
+    if records == None: return
+
     print_table(records)
 
-    return records
+    # Execute macro
+    if pn == None: return
+
+    route.route_macro(keyboard.Controller(), pn, records)
+    return
+
+def run_locate_macro_option(item:str, pn:str, locator:str):
+    
+    rich.print(messages[item]['locator_option'])
+    
+    # Execute macro
+    if pn == None or locator == None:
+        return
+    
+    route.locate_macro(keyboard.Controller(), pn, locator)
+
+    return
+
+def match_sequence(args:list, option:str, item:str):
+    '''Matches a part or weldment command and option with the correct macro.'''
+
+    match option:
+
+        case '--macro' | '-m': # Runs the oracle new routing macro
+            pn = get_part_number()
+
+            run_route_macro_option(args, item, pn)
+        
+        case '--locator' | '-l': # Runs the oracle locator macro ONLY
+
+            pn = get_part_number()
+            locator = get_locator()
+
+            run_locate_macro_option(item, pn, locator)
+
+        case '-ml': # Runs both the new routing macro and locator macro
+
+            pn = get_part_number()
+            locator = get_locator()
+
+            run_route_macro_option(args, item, pn)
+            run_locate_macro_option(item, pn, locator)
+
+        case _:
+            
+            # Construct record sequence
+            records = construct_record_sequence(args, item)
+
+            print_table(records)
+
 
 def print_table(records:list) -> None:
 
@@ -224,6 +275,7 @@ def run_tutorial():
                ['20', 'EDGEGRIND', 'MACH OPER', 0.63, 'GRIND EDGES'],
                ['30', '101001', 'MACHINIST', 1.5, 'FORM BENDS'],
                ['40', '095424', 'PAINTER', 1.75, 'POWDER PAINT PART']]
+    
     # Add records to the table
     count_incorrect = 0
     for i, record in enumerate(records):

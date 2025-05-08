@@ -271,8 +271,7 @@ def paint(length:float) -> float:
         usage = length / 2
     else:
         usage = ((length / 24) + 2) * 12
-    
-    print(usage)
+
     return round(usage, 2) # Round to 2 decimal places
 
 class UsageError(Exception):
