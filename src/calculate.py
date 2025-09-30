@@ -1,7 +1,7 @@
 import tomllib, math
 
 # Load config file
-with open('../config/config.toml', 'rb') as f:
+with open(r'config\config.toml', 'rb') as f:
     config = tomllib.load(f)
 
 def laser(thickness:float, grade:str, perimeter:float) -> float:
@@ -205,7 +205,11 @@ def weld(size:float, weight:float, num_parts:int, inches:float, fixturing:bool) 
     if type(fixturing) == str and fixturing.lower() in ['y', 'n']:
         fixturing = fixturing.lower() == 'y'
 
+    avail_sizes = [_[0] for _ in config['weld']['size']]
+    assert round(size, 2) in avail_sizes, f"size must be in {avail_sizes}"
+
     # Get weld speed
+    speed = False
     for setting in config['weld']['size']:
 
         if setting[0] == round(size, 2):
@@ -271,8 +275,7 @@ def paint(length:float) -> float:
         usage = length / 2
     else:
         usage = ((length / 24) + 2) * 12
-    
-    print(usage)
+
     return round(usage, 2) # Round to 2 decimal places
 
 class UsageError(Exception):

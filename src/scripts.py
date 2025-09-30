@@ -8,11 +8,11 @@ from pynput.keyboard import Key
 from watcher import Watcher
 
 # Read configured messages
-with open('../config/messages.yml', 'r') as f:
+with open(r'config/messages.yml', 'r') as f:
     messages = yaml.load(f, Loader=yaml.Loader)
 
 # Read available commands from config file
-with open('../config/command_config.yml', 'r') as f:
+with open(r'config/command_config.yml', 'r') as f:
     command_data = yaml.load(f, Loader=yaml.Loader)
 
 def get_part_number() -> str:

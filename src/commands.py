@@ -4,11 +4,11 @@ warnings.filterwarnings("ignore", category=SyntaxWarning)
 import os, sys, yaml, scripts, calculate, pynput, re, route, time
 import rich, rich.table
 # Read available commands from config file
-with open('../config/command_config.yml', 'r') as f:
+with open(r'config/command_config.yml', 'r') as f:
     command_data = yaml.load(f, Loader=yaml.Loader)
 
 # Read configured messages
-with open('../config/messages.yml', 'r') as f:
+with open(r'config/messages.yml', 'r') as f:
     messages = yaml.load(f, Loader=yaml.Loader)
 
 def help(options:list, args:list=None):
@@ -136,11 +136,6 @@ def weldment(options:list, args:list):
             
             # Construct record sequence
             records = scripts.construct_record_sequence(args, item='weld')
-    pass
-
-def update(options:list, args:list):
-
-    print(f'update function run with option: {options} and args: {args}')
     pass
 
 def tutorial(options:list, args:list):

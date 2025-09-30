@@ -233,18 +233,6 @@ weld:
                     - '^\d*\.\d*$|^\d*$'
             calc_func: paint
 
-update:
-    description: Run the update macro for a routing.
-    help: |
-        i.e. [yellow]>> update[/yellow]
-
-    aliases: []
-    options: [
-        '--calc', '-c' # Runs the calculator instead of only taking usages
-        ] 
-    args: []
-    func: update # commands.update
-
 exit:
     description: Exit the program
     help: |

@@ -5,7 +5,7 @@ from pynput.keyboard import Listener as KeyboardListener
 from pynput.keyboard import Key
 from watcher import Watcher
 
-with open('../config/messages.yml', 'r') as f:
+with open(r'config/messages.yml', 'r') as f:
     messages = yaml.load(f, Loader=yaml.Loader)
 
 def route_part(kb:keyboard.Controller, pn:str, records:list) -> None:
