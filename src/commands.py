@@ -4,11 +4,11 @@ warnings.filterwarnings("ignore", category=SyntaxWarning)
 import os, sys, yaml, scripts, calculate, pynput, re, route, time
 import rich, rich.table
 # Read available commands from config file
-with open('../config/command_config.yml', 'r') as f:
+with open(r'config/command_config.yml', 'r') as f:
     command_data = yaml.load(f, Loader=yaml.Loader)
 
 # Read configured messages
-with open('../config/messages.yml', 'r') as f:
+with open(r'config/messages.yml', 'r') as f:
     messages = yaml.load(f, Loader=yaml.Loader)
 
 def help(options:list, args:list=None):
@@ -69,7 +69,32 @@ def weldment(option:str, args:list):
     if option == False: return
     
     # Run command with the given option
-    scripts.match_sequence(args, option, 'weld')
+
+    kb = pynput.keyboard.Controller()
+
+    match option:
+
+        case '--macro' | '-m': # Runs the oracle new routing macro
+
+            rich.print(messages['weld']['macro_option'])
+            
+            # Construct record sequence
+            records = scripts.construct_record_sequence(args, item='weld')
+            
+            # Execute macro
+            pn = scripts.get_part_number()
+            locator = scripts.get_locator()
+
+            if records == None or pn == None or locator == None:
+                return
+
+            route.route_macro(kb, pn, records)
+            route.locate_macro(kb, pn, locator)
+
+        case _:
+            
+            # Construct record sequence
+            records = scripts.construct_record_sequence(args, item='weld')
 
     pass
 

@@ -5,11 +5,11 @@ import commands, typing, yaml, os, rich
 import scripts
 
 # Read available commands from config file
-with open('../config/command_config.yml', 'r') as f:
+with open(r'config/command_config.yml', 'r') as f:
     available_commands = yaml.load(f, Loader=yaml.Loader)
 
 # Read configured messages
-with open('../config/messages.yml', 'r') as f:
+with open(r'config/messages.yml', 'r') as f:
     messages = yaml.load(f, Loader=yaml.Loader)
 
 # Construct help command configuration
@@ -71,7 +71,8 @@ def main():
         if arg not in command['args']:
             rich.print(f'[bold red]Invalid argument provided: [white]{arg}[/white]. Available arguments: [yellow]{command["args"]}[/yellow].[/bold red]\n')
             return
-        
+    
+    
     # Run command
     func = getattr(commands, command['func'])
     func(option, args)
@@ -115,5 +116,5 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             commands.exit()
         except Exception as e:
-            print(e.with_traceback())
+            rich.print(str(e))
             rich.print('[bold red]UNABLE TO RUN PREVIOUS COMMAND.[/bold red]\n\n')
