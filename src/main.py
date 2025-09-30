@@ -31,11 +31,18 @@ def main():
     if x.strip() == '':
         return
     
-    command, options, args = parse_args(x)
+    user_input = parse_args(x)
+
+    if user_input is None:
+        return
+    else:
+        command, option, args = user_input
+
+
 
     # Check for help command
     if command == 'help':
-        commands.help(options, args)
+        commands.help(option, args)
         return
 
     # Check command
@@ -54,11 +61,10 @@ def main():
             return
 
 
-    # Check options
-    for option in options:
-        if option not in command['options']:
-            rich.print(f'[bold red]Invalid option provided: [white]{option}[/white]. Available options: [yellow]{command["options"]}[/yellow].[/bold red]\n')
-            return    
+    # Check option
+    if option not in command['options']:
+        rich.print(f'[bold red]Invalid option provided: [white]{option}[/white]. Available options: [yellow]{command["options"]}[/yellow].[/bold red]\n')
+        return    
     
     # Check args
     for arg in args:
@@ -69,7 +75,7 @@ def main():
     
     # Run command
     func = getattr(commands, command['func'])
-    func(options, args)
+    func(option, args)
     
     return 
 
@@ -89,9 +95,13 @@ def parse_args(input:str) -> typing.Tuple[str, list[str], list[str]]:
             flags.append(_)
             input.remove(_)
 
+    if len(flags) > 1:
+        rich.print('[bold red] More than one option provided. Not currently supported.[/bold red]')
+        return
+    
     args = input
 
-    return command, flags, args
+    return command, flags[0], args
 
 
 if __name__ == '__main__':

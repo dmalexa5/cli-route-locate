@@ -46,71 +46,30 @@ def help(options:list, args:list=None):
 
     return
 
-def part(options:list, args:list):
-
-    # Check options
-    option = scripts.restrict_options(options, max_num=1)
-
-    if option == False: return
+def part(option:str, args:list):
 
     # Check args
-    if args == []:
+    if not (option in ['-l', '--locator']):
+        
+        if args == [] and option is not '-l':
 
-        return
-    elif not scripts.part_check_args(args):
+            return
+        
+        elif not scripts.part_check_args(args):
 
-        rich.print(f'[bold red]Invalid args provided: [white]{args}[/white].[/bold red]\n')
+            rich.print(f'[bold red]Invalid args provided: [white]{args}[/white].[/bold red]\n')
 
-        return
+            return
     
     # Run command with the given option
-    kb = pynput.keyboard.Controller()
+    scripts.match_sequence(args, option, 'part')
 
-    match option:
-
-        case '--macro' | '-m': # Runs the oracle new routing macro
-
-            rich.print(messages['part']['macro_option'])
-            
-            # Construct record sequence
-            records = scripts.construct_record_sequence(args)
-            
-            # Execute macro
-            pn = scripts.get_part_number()
-            locator = scripts.get_locator()
-
-            if records == None or pn == None or locator == None:
-                return
-
-            route.route_macro(kb, pn, records)
-            route.locate_macro(kb, pn, locator)
-        
-        case '--locator' | '-l': # Runc the oracle locator macro ONLY
-
-            rich.print(messages['part']['locator_option'])
-
-            pn = scripts.get_part_number()
-            locator = scripts.get_locator()
-
-            if pn == None or locator == None:
-                return
-            
-            route.locate_macro(kb, pn, locator)
-
-        case _:
-            
-            # Construct record sequence
-            records = scripts.construct_record_sequence(args)
-
-def weldment(options:list, args:list):
-    '''Runs the weldment wizard'''
-
-    # Check options
-    option = scripts.restrict_options(options, max_num=1)
+def weldment(option:str, args:list):
 
     if option == False: return
     
     # Run command with the given option
+
     kb = pynput.keyboard.Controller()
 
     match option:
@@ -136,6 +95,7 @@ def weldment(options:list, args:list):
             
             # Construct record sequence
             records = scripts.construct_record_sequence(args, item='weld')
+
     pass
 
 def tutorial(options:list, args:list):

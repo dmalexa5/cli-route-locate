@@ -20,7 +20,8 @@ part:
     options:
         [
             '--macro', '-m', # Runs the new part macro
-            '--locator', '-l' # Runs only the locator macro
+            '--locator', '-l', # Runs only the locator macro
+            '--both', '-ml' # Runs the new part macro, then the locator macro
         ]
     args:
         - l # laser
@@ -135,8 +136,9 @@ weld:
     aliases: ['w', 'weldment']
     options:
         [
-            '--macro', '-m', # Runs the new part macro
-            '--locator', '-l' # Runs only the locator macro
+            '--macro', '-m', # Runs only new part macro
+            '--locator', '-l', # Runs only the locator macro
+            '--both', '-ml' # Runs the new part macro, then the locator macro
         ]
     args:
         - mb # medium bent
