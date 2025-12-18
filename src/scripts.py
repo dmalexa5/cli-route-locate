@@ -156,6 +156,11 @@ def run_route_macro_option(args:list, item:str, pn:str):
     # Execute macro
     if pn == None: return
 
+    table = [['locator', 'thickness', 'flat/bent'],
+             ['32-01', 0.250, 'flat']]
+
+    print_table(table)
+
     route.route_macro(keyboard.Controller(), pn, records)
     return
 
